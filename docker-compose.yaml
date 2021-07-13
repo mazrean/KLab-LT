@@ -14,7 +14,8 @@ services:
       SSHHOST: ssh-separator
       SSHPORT: 2222
     entrypoint: yarn start --title 'KLab LT'
-    depends_on: ssh-separator
+    depends_on:
+      - ssh-separator
   ssh-separator:
     image: ghcr.io/mazrean/ssh-separator:latest
     environment:
