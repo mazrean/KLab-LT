@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  wetty:
+    image: wettyoss/wetty
+    restart: always
+    container_name: wetty
+    working_dir: /usr/src/app
+    volumes:
+      - ./ssl:/usr/src/app/ssl
+    ports:
+      - 8080:3000
+    environment:
+      SSHHOST: ssh-separator
+      SSHPORT: 2222
+    entrypoint: yarn start --title 'KLab LT'
+    depends_on: ssh-separator
+  ssh-separator:
+    image: ghcr.io/mazrean/ssh-separator:latest
+    environment:
+      WELCOME: "
+        \n██╗  ██╗██╗      █████╗ ██████╗     ██╗  ████████╗
+        \n██║ ██╔╝██║     ██╔══██╗██╔══██╗    ██║  ╚══██╔══╝
+        \n█████╔╝ ██║     ███████║██████╔╝    ██║     ██║   
+        \n██╔═██╗ ██║     ██╔══██║██╔══██╗    ██║     ██║   
+        \n██║  ██╗███████╗██║  ██║██████╔╝    ███████╗██║   
+        \n╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝     ╚══════╝╚═╝   
+        \n\n"
+      PROMETHEUS: "false"
+      API_PORT: 3000
+      SSH_PORT: 2222
+      BADGER_DIR: /tmp/badger
+      IMAGE_NAME: mazrean/cpctf-ubuntu:latest
+      IMAGE_USER: ubuntu
+      IMAGE_CMD: /bin/bash
+      CPU_LIMIT: 0.5
+      MEMORY_LIMIT: 1024
+      API_KEY: api_key
+    ports:
+      - 3000:3000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./badger:/tmp/badger
